@@ -306,8 +306,7 @@
     <header>
         <div class="container">
             <div class="header-left">
-                <div class="logo">ワクチン予約</div>
-                <div class="account-name" id="accountName">ようこそ、ゲスト様</div>
+                <div class="logo">予約</div>
             </div>
             <div class="header-right">
                 <div class="today-date" id="currentDate"></div>
@@ -320,7 +319,7 @@
 
     <main>
         <div class="container">
-            <h1 class="main-title">ワクチンの予約</h1>
+            <h1 class="main-title">インフルエンザワクチン予約</h1>
             <p class="disclaimer">
                 <strong>注意書き:</strong> 10本で1セットのため、10人予約が揃い次第接種可能となります。<br>
                 お一人様1枠のみご予約ください。代表者の方がまとめて予約することも可能です。
@@ -340,7 +339,7 @@
 
     <footer>
         <div class="container">
-            <p>© 2025 正木ホールディングス</p>
+            <p>© 2025 株式会社</p>
         </div>
     </footer>
 
@@ -349,16 +348,16 @@
             // ヘッダーの日付表示
             const currentDateElem = document.getElementById('currentDate');
             const today = new Date();
-            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' };
             currentDateElem.textContent = today.toLocaleDateString('ja-JP', options);
 
             // アカウント名（仮）
-            const accountNameElem = document.getElementById('accountName');
+           // const accountNameElem = document.getElementById('accountName');
             // 実際のアプリケーションではログイン情報から取得します
-            const userName = "正木"; // 例
-            if (userName) {
-                accountNameElem.textContent = `ようこそ、${userName}様`;
-            }
+      //      const userName = "正木"; // 例
+       //     if (userName) {
+       //         accountNameElem.textContent = `ようこそ、${userName}様`;
+       //     }
 
             // 予約日選択
             const dateInput = document.getElementById('reservation-date');
