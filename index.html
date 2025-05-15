@@ -3,28 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ワクチン予約アプリ</title>
+    <title>ワクチン予約システム</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary-color: #0d0d2b; /* より深い紺色 */
-            --secondary-color: #1a1a3d;
-            --accent-color-cyan: #00f0ff;
-            --accent-color-magenta: #ff00ff;
-            --accent-color-purple: #9d00ff;
-            --text-color: #e0e0e0;
-            --text-color-darker: #a0a0a0;
-            --border-radius: 8px;
-            --neon-shadow-cyan: 0 0 5px var(--accent-color-cyan),
-                                0 0 10px var(--accent-color-cyan),
-                                0 0 15px var(--accent-color-cyan);
-            --neon-shadow-magenta: 0 0 5px var(--accent-color-magenta),
-                                   0 0 10px var(--accent-color-magenta),
-                                   0 0 15px var(--accent-color-magenta);
-            --card-bg-color: rgba(30, 30, 60, 0.7);
-            --input-bg-color: rgba(20, 20, 40, 0.8);
+            --primary-color: #ff8c66; /* 温かいオレンジ系 */
+            --secondary-color: #ffe0b2; /* 明るいクリーム系 */
+            --text-color: #5d4037; /* 温かいブラウン系 */
+            --background-color: #fff3e0; /* とても明るいクリーム/オフホワイト */
+            --card-background: #ffffff;
+            --success-color: #81c784; /* ソフトな緑 */
+            --border-radius: 12px;
+            --box-shadow: 0 6px 12px rgba(0,0,0,0.1);
         }
-
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Roboto:wght@300;400;700&display=swap');
 
         * {
             margin: 0;
@@ -33,430 +24,472 @@
         }
 
         body {
-            font-family: 'Roboto', sans-serif;
-            background-color: var(--primary-color);
+            font-family: 'Hiragino Sans', 'Meiryo', sans-serif;
+            background-color: var(--background-color);
             color: var(--text-color);
             line-height: 1.6;
-            overflow-x: hidden; /* 横スクロールバーの防止 */
-            padding-top: 80px; /* 固定ヘッダーのための余白 */
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         .container {
             width: 90%;
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
+            padding: 20px 0;
         }
 
-        /* --- Header --- */
+        /* Header */
         header {
-            background-color: rgba(10, 10, 30, 0.85);
-            backdrop-filter: blur(10px);
+            background: linear-gradient(135deg, var(--primary-color), #ffb366); /* グラデーション */
+            color: white;
             padding: 15px 0;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            border-bottom: 1px solid var(--accent-color-cyan);
-            box-shadow: 0 2px 10px rgba(0, 240, 255, 0.3);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         header .container {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px; /* ヘッダー内のコンテナは左右パディングを少し調整 */
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
         }
 
         .logo {
-            font-family: 'Orbitron', sans-serif;
             font-size: 1.8em;
-            color: var(--accent-color-cyan);
-            text-shadow: var(--neon-shadow-cyan);
-            text-decoration: none;
+            font-weight: bold;
+            margin-right: 20px; /* ロゴとアカウント名の間にスペース */
         }
 
-        .header-info {
+        .account-name {
+            font-size: 1em;
+        }
+        
+        .header-right {
             display: flex;
             align-items: center;
-            gap: 20px;
         }
 
-        .header-info span {
+        .today-date {
+            margin-right: 20px;
             font-size: 0.9em;
-        }
-
-        #account-name {
-            font-weight: bold;
-            color: var(--accent-color-magenta);
-        }
-
-        #current-date {
-            color: var(--text-color-darker);
         }
 
         .settings-btn {
-            background: linear-gradient(45deg, var(--accent-color-purple), var(--accent-color-magenta));
-            color: white;
+            background: none;
             border: none;
-            padding: 10px 15px;
-            border-radius: var(--border-radius);
+            color: white;
+            font-size: 1.5em;
             cursor: pointer;
-            font-size: 0.9em;
-            font-weight: bold;
-            transition: all 0.3s ease;
-            box-shadow: 0 0 8px var(--accent-color-magenta), inset 0 0 5px rgba(255,255,255,0.3);
+            transition: transform 0.3s ease;
         }
-
         .settings-btn:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 0 15px var(--accent-color-magenta), 0 0 25px var(--accent-color-purple), inset 0 0 8px rgba(255,255,255,0.4);
+            transform: rotate(45deg);
         }
 
-        /* --- Main Content --- */
+        /* Main Content */
         main {
-            padding-top: 20px; /* ヘッダーの高さ分を考慮 */
+            flex-grow: 1;
+            padding: 30px 0;
         }
 
-        .hero-section {
+        .main-title {
+            font-size: 2.8em;
+            color: var(--primary-color);
             text-align: center;
-            margin-bottom: 40px;
-        }
-
-        .hero-section h1 {
-            font-family: 'Orbitron', sans-serif;
-            font-size: 3em;
-            margin-bottom: 15px;
-            color: var(--accent-color-cyan);
-            text-shadow: var(--neon-shadow-cyan), 0 0 30px var(--accent-color-cyan);
-            animation: flicker 1.5s infinite alternate;
-        }
-
-      /*  @keyframes flicker {
-            0%, 18%, 22%, 25%, 53%, 57%, 100% {
-                text-shadow:
-                    0 0 4px #fff,
-                    0 0 11px var(--accent-color-cyan),
-                    0 0 19px var(--accent-color-cyan),
-                    0 0 40px var(--accent-color-cyan),
-                    0 0 80px var(--accent-color-cyan),
-                    0 0 90px var(--accent-color-cyan),
-                    0 0 100px var(--accent-color-cyan),
-                    0 0 150px var(--accent-color-cyan);
-            }
-            20%, 24%, 55% {        
-                text-shadow: none;
-            }
-        }
-        */
-
-        .hero-section .notice {
-            font-size: 1.1em;
+            margin-bottom: 20px;
             font-weight: bold;
-            color: var(--accent-color-magenta);
-            background-color: rgba(255, 0, 255, 0.1);
-            padding: 10px;
-            border-radius: var(--border-radius);
-            display: inline-block;
-            border: 1px solid var(--accent-color-magenta);
-            box-shadow: 0 0 10px rgba(255,0,255,0.3);
         }
 
-        /* --- Reservation Cards --- */
-        .reservation-schedule {
+        .disclaimer {
+            text-align: center;
+            font-size: 1.1em;
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: var(--secondary-color);
+            border-radius: var(--border-radius);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .date-selector {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .date-selector label {
+            font-size: 1.2em;
+            margin-right: 10px;
+        }
+        .date-selector input[type="date"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: var(--border-radius);
+            font-size: 1em;
+            background-color: white;
+        }
+
+        #reservation-slots-container {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
         }
 
         .reservation-card {
-            background-color: var(--card-bg-color);
-            padding: 25px;
+            background-color: var(--card-background);
             border-radius: var(--border-radius);
-            border: 1px solid var(--accent-color-purple);
-            box-shadow: 0 0 15px rgba(157, 0, 255, 0.3), inset 0 0 10px rgba(157, 0, 255, 0.2);
+            box-shadow: var(--box-shadow);
+            padding: 25px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
         }
-
         .reservation-card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 0 25px rgba(157, 0, 255, 0.5), inset 0 0 15px rgba(157, 0, 255, 0.3);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.15);
         }
 
-        .reservation-card h3 {
-            font-family: 'Orbitron', sans-serif;
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--secondary-color);
+        }
+        .time-slot {
             font-size: 1.5em;
-            color: var(--accent-color-cyan);
-            margin-bottom: 20px;
-            text-align: center;
-            border-bottom: 1px dashed var(--accent-color-cyan);
-            padding-bottom: 10px;
-            text-shadow: var(--neon-shadow-cyan);
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .slot-status {
+            font-size: 0.9em;
+            padding: 5px 10px;
+            border-radius: 20px;
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+        }
+        .slot-status.full {
+            background-color: #ffcdd2; /* 少し赤みのある背景 */
+            color: #c62828;
+        }
+         .slot-status.available {
+            background-color: var(--success-color);
+            color: white;
         }
 
-        .name-slots {
+
+        .name-inputs-list {
             list-style: none;
-            padding: 0;
             margin-bottom: 20px;
         }
-
-        .name-slots li {
+        .name-inputs-list li {
             display: flex;
             align-items: center;
             margin-bottom: 10px;
         }
-
-        .name-slots li .slot-number {
-            min-width: 25px;
+        .name-inputs-list li span {
             margin-right: 10px;
-            color: var(--text-color-darker);
-        }
-
-        .name-slots input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            background-color: var(--input-bg-color);
-            border: 1px solid var(--accent-color-purple);
-            border-radius: var(--border-radius);
+            width: 20px; /* 番号の幅を固定 */
+            text-align: right;
             color: var(--text-color);
-            font-size: 0.9em;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
         }
-
-        .name-slots input[type="text"]:focus {
+        .name-inputs-list input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: var(--border-radius);
+            font-size: 0.95em;
+            transition: border-color 0.3s ease;
+        }
+        .name-inputs-list input[type="text"]:focus {
+            border-color: var(--primary-color);
             outline: none;
-            border-color: var(--accent-color-magenta);
-            box-shadow: 0 0 8px var(--accent-color-magenta);
+        }
+        .name-inputs-list input[type="text"]::placeholder {
+            color: #aaa;
+            font-style: italic;
         }
 
-        .reserve-btn {
-            display: block;
-            width: 100%;
-            padding: 12px;
-            background: linear-gradient(45deg, var(--accent-color-cyan), var(--accent-color-magenta));
+
+        .btn {
+            display: inline-block;
+            padding: 12px 25px;
+            font-size: 1.1em;
+            font-weight: bold;
             color: white;
             border: none;
             border-radius: var(--border-radius);
-            font-size: 1.1em;
-            font-weight: bold;
             cursor: pointer;
+            text-align: center;
             transition: all 0.3s ease;
-            box-shadow: 0 0 10px var(--accent-color-cyan), 0 0 10px var(--accent-color-magenta);
+            text-decoration: none;
         }
 
-        .reserve-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 15px var(--accent-color-cyan), 0 0 15px var(--accent-color-magenta), 0 0 25px var(--accent-color-purple);
+        .btn-gradient {
+            background-image: linear-gradient(to right, var(--primary-color) 0%, #ffae73 51%, var(--primary-color) 100%);
+            background-size: 200% auto;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        .btn-gradient:hover {
+            background-position: right center; /* change the direction of the change here */
+            box-shadow: 0 6px 12px rgba(0,0,0,0.2);
+            transform: translateY(-2px);
+        }
+        .btn-gradient:active {
+            transform: translateY(0px);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .btn-reserve {
+            width: 100%;
         }
         
-        .reserve-btn:disabled {
-            background: linear-gradient(45deg, #555, #333);
-            color: #888;
-            cursor: not-allowed;
-            box-shadow: none;
-        }
-
-        /* --- Footer --- */
+        /* Footer */
         footer {
-            background-color: var(--secondary-color);
+            background-color: var(--text-color);
+            color: var(--secondary-color);
             text-align: center;
             padding: 20px 0;
-            margin-top: 50px;
-            border-top: 1px solid var(--accent-color-cyan);
-            font-size: 0.9em;
+            margin-top: auto; /* フッターを最下部に固定 */
         }
 
-        /* --- Scrollbar --- */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        ::-webkit-scrollbar-track {
-            background: var(--primary-color);
-        }
-        ::-webkit-scrollbar-thumb {
-            background: var(--accent-color-purple);
-            border-radius: 4px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: var(--accent-color-magenta);
-        }
-
-        /* --- Responsive Design --- */
+        /* Responsive adjustments */
         @media (max-width: 768px) {
-            .hero-section h1 {
-                font-size: 2.2em;
-            }
-
-            .header-info {
-                gap: 10px;
-                flex-direction: column; /* スマホでは縦並びも検討 */
-                align-items: flex-end;
-            }
             .header .container {
                 flex-direction: column;
-                align-items: center;
-                gap: 10px;
+                align-items: flex-start;
             }
-            body {
-                padding-top: 140px; /* ヘッダーが高くなるため調整 */
+            .header-left {
+                margin-bottom: 10px; /* アカウント名と日付の間にマージン */
             }
-
-            .reservation-schedule {
-                grid-template-columns: 1fr; /* 1列表示 */
+            .logo { font-size: 1.5em; }
+            .account-name { font-size: 0.9em; }
+            .header-right {
+                width: 100%;
+                justify-content: space-between; /* 日付と設定ボタンを両端に */
             }
+            .main-title {
+                font-size: 2.2em;
+            }
+            .disclaimer {
+                font-size: 1em;
+            }
+            .date-selector label, .date-selector input[type="date"] {
+                display: block;
+                width: 100%;
+                margin-bottom: 10px;
+                text-align: left;
+            }
+             .date-selector input[type="date"] {
+                text-align: center; /* 日付入力は中央揃えの方が見やすいかも */
+             }
         }
-
+        
         @media (max-width: 480px) {
-            .hero-section h1 {
+            .main-title {
                 font-size: 1.8em;
             }
-            .hero-section .notice {
+            .disclaimer {
                 font-size: 0.9em;
             }
-            .reservation-card h3 {
-                font-size: 1.3em;
+             #reservation-slots-container {
+                grid-template-columns: 1fr; /* スマホでは1カラム */
             }
-            .settings-btn, .header-info span {
-                font-size: 0.8em;
-            }
-            .logo {
-                font-size: 1.5em;
-            }
-             body {
-                padding-top: 130px; /* ヘッダーが高くなるため調整 */
+            .btn {
+                padding: 10px 20px;
+                font-size: 1em;
             }
         }
-
     </style>
 </head>
 <body>
-
     <header>
         <div class="container">
-            <a href="#" class="logo">VRS</a>
-            <div class="header-info">
-                <span id="account-name">ようこそ、ゲスト様</span>
-                <span id="current-date"></span>
-                <button class="settings-btn" id="settingsButton">設定</button>
+            <div class="header-left">
+                <div class="logo">ワクチン予約</div>
+                <div class="account-name" id="accountName">ようこそ、ゲスト様</div>
+            </div>
+            <div class="header-right">
+                <div class="today-date" id="currentDate"></div>
+                <button class="settings-btn" aria-label="設定">
+                    <i class="fas fa-cog"></i>
+                </button>
             </div>
         </div>
     </header>
 
     <main>
         <div class="container">
-            <section class="hero-section">
-                <h1 style="text-shadow: 0 0 4px #fff">ワクチンの予約</h1>
-                <p class="notice">10本で1セットのため、10人予約が揃い次第接種可能となります。</p>
-            </section>
+            <h1 class="main-title">ワクチンの予約</h1>
+            <p class="disclaimer">
+                <strong>注意書き:</strong> 10本で1セットのため、10人予約が揃い次第接種可能となります。<br>
+                お一人様1枠のみご予約ください。代表者の方がまとめて予約することも可能です。
+            </p>
 
-            <section class="reservation-schedule" id="reservationSchedule">
-                <!-- 予約カードはここにJavaScriptで動的に生成されます -->
-            </section>
+            <div class="date-selector">
+                <label for="reservation-date">予約希望日:</label>
+                <input type="date" id="reservation-date">
+            </div>
+
+            <div id="reservation-slots-container">
+                <!-- 予約スロットはJSでここに動的に生成されます -->
+                <p id="no-slots-message" style="text-align:center; font-size:1.2em; color: var(--text-color); display:none;">選択された日付に予約可能な時間枠はありません。</p>
+            </div>
         </div>
     </main>
 
     <footer>
         <div class="container">
-            <p>© 2025 株式会社 正木. All Rights Reserved.</p>
+            <p>© 2025 正木ホールディングス</p>
         </div>
     </footer>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // アカウント名 (ダミー)
-            const accountNameElement = document.getElementById('account-name');
-            // 実際のアプリではログイン情報から取得
-            accountNameElement.textContent = 'ようこそ、正木様';
-
-            // 今日の日付を表示
-            const currentDateElement = document.getElementById('current-date');
+            // ヘッダーの日付表示
+            const currentDateElem = document.getElementById('currentDate');
             const today = new Date();
             const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
-            currentDateElement.textContent = today.toLocaleDateString('ja-JP', options);
+            currentDateElem.textContent = today.toLocaleDateString('ja-JP', options);
 
-            // 設定ボタンのダミー処理
-            const settingsButton = document.getElementById('settingsButton');
-            settingsButton.addEventListener('click', function() {
-                alert('設定画面は現在準備中です。');
-            });
+            // アカウント名（仮）
+            const accountNameElem = document.getElementById('accountName');
+            // 実際のアプリケーションではログイン情報から取得します
+            const userName = "正木"; // 例
+            if (userName) {
+                accountNameElem.textContent = `ようこそ、${userName}様`;
+            }
 
-            // 予約スケジュールの生成
-            const scheduleContainer = document.getElementById('reservationSchedule');
-            const reservationTimes = generateReservationTimes("09:00", "17:00", 30); // 9:00から17:00まで30分間隔
+            // 予約日選択
+            const dateInput = document.getElementById('reservation-date');
+            const slotsContainer = document.getElementById('reservation-slots-container');
+            const noSlotsMessage = document.getElementById('no-slots-message');
+            
+            // デフォルトで今日の日付を設定し、未来の日付のみ選択可能に
+            const todayString = today.toISOString().split('T')[0];
+            dateInput.value = todayString;
+            dateInput.min = todayString;
 
-            reservationTimes.forEach(timeSlot => {
+            // 時間枠を生成する関数
+            function generateTimeSlots(selectedDateStr) {
+                slotsContainer.innerHTML = ''; // 既存のスロットをクリア
+                noSlotsMessage.style.display = 'none';
+
+                const selectedDate = new Date(selectedDateStr + "T00:00:00"); // JSTとして解釈
+                const dayOfWeek = selectedDate.getDay(); // 0 (日曜日) - 6 (土曜日)
+
+                // 土日は予約不可とする例 (0:日曜, 6:土曜)
+                // if (dayOfWeek === 0 || dayOfWeek === 6) {
+                //     noSlotsMessage.textContent = "土日は予約を受け付けておりません。";
+                //     noSlotsMessage.style.display = 'block';
+                //     return;
+                // }
+                
+                // 予約可能な時間帯 (例: 9:00 - 17:00)
+                const startTime = 9; // 9時
+                const endTime = 17; // 17時 (17:00の枠は生成しないので、16:30が最終)
+                const interval = 30; // 30分間隔
+                let slotsGenerated = 0;
+
+                for (let hour = startTime; hour < endTime; hour++) {
+                    for (let minute = 0; minute < 60; minute += interval) {
+                        // 過去の日付・時間の場合はスキップ
+                        const slotDateTime = new Date(selectedDate);
+                        slotDateTime.setHours(hour, minute, 0, 0);
+                        
+                        if (slotDateTime < new Date() && selectedDateStr === todayString) {
+                            continue; // 今日の過去時間はスキップ
+                        }
+
+                        const timeStr = `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}`;
+                        const card = createReservationCard(timeStr);
+                        slotsContainer.appendChild(card);
+                        slotsGenerated++;
+                    }
+                }
+                if (slotsGenerated === 0) {
+                     noSlotsMessage.textContent = "選択された日付に予約可能な時間枠はありません。";
+                     noSlotsMessage.style.display = 'block';
+                }
+            }
+
+            // 個別の予約カードを生成する関数
+            function createReservationCard(time) {
                 const card = document.createElement('div');
                 card.classList.add('reservation-card');
 
-                const title = document.createElement('h3');
-                title.textContent = `予約日時: ${timeSlot.start} - ${timeSlot.end}`;
-                card.appendChild(title);
-
-                const nameSlotsList = document.createElement('ul');
-                nameSlotsList.classList.add('name-slots');
-                for (let i = 1; i <= 10; i++) {
-                    const listItem = document.createElement('li');
-                    const slotNumber = document.createElement('span');
-                    slotNumber.classList.add('slot-number');
-                    slotNumber.textContent = `${i}.`;
-                    
-                    const input = document.createElement('input');
-                    input.type = 'text';
-                    input.placeholder = `名前 ${i}`;
-                    input.setAttribute('aria-label', `予約者 ${i} の名前`);
-
-                    listItem.appendChild(slotNumber);
-                    listItem.appendChild(input);
-                    nameSlotsList.appendChild(listItem);
+                // 予約人数（ダミー、実際はサーバーから取得）
+                const reservedCount = Math.floor(Math.random() * 11); // 0-10のランダムな予約数
+                const spotsAvailable = 10 - reservedCount;
+                
+                let statusText = `${reservedCount}/10 名予約済`;
+                let statusClass = '';
+                if (reservedCount === 10) {
+                    statusText = '満員';
+                    statusClass = 'full';
+                } else if (spotsAvailable > 0) {
+                     statusClass = 'available'; // 空きがある場合に緑にするなら
                 }
-                card.appendChild(nameSlotsList);
 
-                const reserveButton = document.createElement('button');
-                reserveButton.classList.add('reserve-btn');
-                reserveButton.textContent = 'この時間帯で予約する';
-                reserveButton.addEventListener('click', function() {
-                    // ここで予約処理のロジックを実装
-                    // 例: 入力された名前を取得し、サーバーに送信
-                    const names = [];
-                    card.querySelectorAll('.name-slots input[type="text"]').forEach(input => {
-                        if (input.value.trim() !== '') {
-                            names.push(input.value.trim());
+
+                let nameInputsHTML = '<ol class="name-inputs-list">';
+                for (let i = 1; i <= 10; i++) {
+                    nameInputsHTML += `
+                        <li>
+                            <span>${i}.</span>
+                            <input type="text" name="name-${time}-${i}" placeholder="お名前 (任意)" ${reservedCount >= i ? 'disabled value="予約済"' : ''}>
+                        </li>`;
+                }
+                nameInputsHTML += '</ol>';
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <div class="time-slot">${time}</div>
+                        <div class="slot-status ${statusClass}">${statusText}</div>
+                    </div>
+                    ${nameInputsHTML}
+                    <button class="btn btn-gradient btn-reserve" ${reservedCount === 10 ? 'disabled' : ''}>
+                        ${reservedCount === 10 ? '予約不可' : 'この時間帯で予約する'}
+                    </button>
+                `;
+                
+                // 予約ボタンのイベントリスナー
+                card.querySelector('.btn-reserve').addEventListener('click', function() {
+                    if (reservedCount < 10) {
+                        const names = [];
+                        card.querySelectorAll('.name-inputs-list input[type="text"]').forEach((input, index) => {
+                            if (input.value.trim() !== '' && !input.disabled) {
+                                names.push(input.value.trim());
+                            }
+                        });
+                        if (names.length === 0 && reservedCount < 10) {
+                             alert(`予約時間: ${time}\nお名前を1名以上入力してください。`);
+                             return;
                         }
-                    });
-                    if (names.length > 0) {
-                        alert(`${timeSlot.start} - ${timeSlot.end} の予約を試みました。\n予約者: ${names.join(', ')}\n（実際の予約処理は未実装です）`);
-                    } else {
-                        alert('少なくとも1名の名前を入力してください。');
+                        // ここで予約処理（例: API呼び出し）
+                        alert(`予約時間: ${time}\n以下の名前で予約リクエスト:\n${names.join('\n')}\n\n(${10 - reservedCount - names.length}名分の空きがあります)`);
+                        // 実際にはここで画面を更新したり、確認メッセージを出したりします
                     }
                 });
-                card.appendChild(reserveButton);
 
-                scheduleContainer.appendChild(card);
+                return card;
+            }
+
+            // 日付が変更されたら時間枠を再生成
+            dateInput.addEventListener('change', function() {
+                generateTimeSlots(this.value);
             });
 
-            // 予約時間帯を生成するヘルパー関数
-            function generateReservationTimes(startTimeStr, endTimeStr, intervalMinutes) {
-                const times = [];
-                let currentTime = new Date(`2000-01-01T${startTimeStr}:00`);
-                const endTime = new Date(`2000-01-01T${endTimeStr}:00`);
+            // 初期表示（今日の日付で時間枠を生成）
+            generateTimeSlots(dateInput.value);
 
-                while (currentTime < endTime) {
-                    const slotStart = new Date(currentTime);
-                    currentTime.setMinutes(currentTime.getMinutes() + intervalMinutes);
-                    const slotEnd = new Date(currentTime);
+            // 設定ボタンのダミー処理
+            const settingsButton = document.querySelector('.settings-btn');
+            settingsButton.addEventListener('click', function() {
+                alert('設定機能は現在準備中です。');
+            });
 
-                    if (slotEnd > endTime) break; // 最終スロットが終了時刻を超える場合は含めない
-
-                    times.push({
-                        start: slotStart.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false }),
-                        end: slotEnd.toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit', hour12: false })
-                    });
-                }
-                return times;
-            }
         });
     </script>
-
 </body>
 </html>
